@@ -27,7 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-print(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
+# print(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
 #
 # urlpatterns = [
 #     # ... the rest of your URLconf goes here ...
