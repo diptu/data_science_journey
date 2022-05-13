@@ -73,6 +73,11 @@ class Employee(models.Model):
     def __str__(self):
         return self.slug
 
+    @property
+    def full_name(self):
+        "Returns the person's full name."
+        return '%s %s' % (self.first_name, self.last_name)
+
     def save(self, **kwargs):
         slug = "%s-%s" % (self.first_name, self.last_name)
         self.slug = unique_slug_generator(self, slug)

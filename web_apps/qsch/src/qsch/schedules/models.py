@@ -2,8 +2,67 @@ from django.db import models
 from employees.models import Employee
 from django.utils.timezone import now
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
+from datetime import timedelta
+
 
 # Create your models here.
+
+class Shift(models.Model):
+    DAY = 'D'
+    NIGHT = 'N'
+    EVENING = 'E'
+
+    SHIFT_CHOICES = (
+        (DAY, 'Day'),
+        (NIGHT, "Night"),
+        (EVENING, 'Evening'),
+    )
+    shift = models.CharField(max_length=1, choices=SHIFT_CHOICES, default=DAY,
+                             help_text='Day Shift 5 day 40 hours')
+    name = models.CharField(max_length=30, help_text='Day Shift 5 day 40 hours')
+    weekly_contracted_man_hour = models.DurationField(verbose_name='Contracted Man Hours per week',
+                                                      default=timedelta(hours=40))
+    shift_per_week = models.IntegerField(verbose_name='No of shift per week', default=5,
+                                         validators=[MinValueValidator(1), MaxValueValidator(100)])
+
+    def __str__(self):
+        return self.name
+
+
+class Team(models.Model):
+    sub_group = models.CharField(max_length=20, help_text='Group Name-Group No i,e Alhpa-0')
+    group = models.CharField(max_length=20, help_text='Group Name i,e Alhpa')
+
+    BANGLADESH = 'BD'
+    UKRAINE = 'UA'
+    SERBIA = 'RS'
+
+    OPERATION_CHOICES = (
+        (BANGLADESH, 'Bangladesh'),
+        (UKRAINE, 'Ukraine'),
+        (SERBIA, 'Serbia'),
+    )
+    operation = models.CharField(max_length=2, choices=OPERATION_CHOICES, default=BANGLADESH)
+    sub_group_lead = models.ForeignKey(Employee, on_delete=models.CASCADE,
+                                       related_name='sub_group_lead')
+    group_lead = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='group_lead')
+    shift = models.ForeignKey(Shift, on_delete=models.CASCADE)
+
+    @property
+    def sub_group_leader(self):
+        return self.sub_group_lead.slug
+
+    @property
+    def group_leader(self):
+        return self.group_lead.slug
+
+    @property
+    def shift(self):
+        return self.shift.name
+    def __str__(self):
+        return self.sub_group
+
 class Schedule(models.Model):
     employee = models.ForeignKey(
         Employee,

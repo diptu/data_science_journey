@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Schedule
+from .models import Schedule,Team,Shift
 
 
 # Register your models here.
@@ -19,3 +19,5 @@ class ScheduleAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Schedule, ScheduleAdmin)
+admin.site.register(Team)
+admin.site.register(Shift)
