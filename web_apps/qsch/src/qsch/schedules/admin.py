@@ -15,7 +15,7 @@ class ScheduleAdmin(admin.ModelAdmin):
         "is_on_vacation",
         "is_weekend")
 
-    list_display = ('employee', 'start_time', 'end_time', 'status')
+    list_display = ('employee', 'status', 'start_time', 'end_time', 'overtime_stated_at', 'overtime_ended_at')
 
 
 admin.site.register(Schedule, ScheduleAdmin)

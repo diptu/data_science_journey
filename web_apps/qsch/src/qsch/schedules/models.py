@@ -57,6 +57,7 @@ class Schedule(models.Model):
             raise ValidationError('Regular end time should be before starting overtime.')
 
     def save(self, *args, **kwargs):
+
         self.is_on_non_paid_leave = 1 if self.status == self.NON_PAID_LEAVE else 0
         self.is_on_non_approved_leave = 1 if self.status == self.NON_APPROVED_LEAVE else 0
         self.is_on_paid_leave = 1 if self.status == self.PAID_LEAVE else 0
@@ -64,4 +65,5 @@ class Schedule(models.Model):
         self.is_on_sick_leave = 1 if self.status == self.SICK_LEAVE else 0
         self.is_on_vacation = 1 if self.status == self.VACATION else 0
         self.is_weekend = 1 if self.status == self.WEEKEND else 0
+
         super(Schedule, self).save(*args, **kwargs)
