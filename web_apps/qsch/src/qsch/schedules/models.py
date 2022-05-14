@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from employees.models import Employee
 from django.utils.timezone import now
 from django.core.exceptions import ValidationError
@@ -92,6 +93,7 @@ class Schedule(models.Model):
     end_time = models.DateTimeField(blank=True, null=True, default=now)
     overtime_stated_at = models.DateTimeField(blank=True, null=True, default=now)
     overtime_ended_at = models.DateTimeField(blank=True, null=True, default=now)
+    team = models.ForeignKey(Team, on_delete=models.SET_NULL, blank=True, null=True)
 
     is_on_non_paid_leave = models.BooleanField(default=False)
     is_on_non_approved_leave = models.BooleanField(default=False)
@@ -104,15 +106,27 @@ class Schedule(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
     def __str__(self):
         return str(self.employee)
+
+    @property
+    def get_emp(self):
+        return self.employee.slug
+    @property
+    def get_email(self):
+        return self.employee.email
+
+    @property
+    def get_operations(self):
+        return self.team.operation
 
     def clean(self):
         if self.start_time > self.end_time:
             raise ValidationError('Start time should be before end time.')
         if self.overtime_stated_at > self.overtime_ended_at:
             raise ValidationError('Starting overtime should be before ending overtime.')
-        if self.overtime_stated_at > self.end_time:
+        if self.overtime_stated_at < self.end_time:
             raise ValidationError('Regular end time should be before starting overtime.')
 
     def save(self, *args, **kwargs):

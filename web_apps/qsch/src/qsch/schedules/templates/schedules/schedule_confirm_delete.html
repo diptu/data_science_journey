@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% load l10n %}
+<div class="row row-striped">
+    <div class="col-2 text-right">
+        <h1 class="display-4"><span class="badge badge-secondary"> {{object.start_time|date:'d' }}</span></h1>
+        <h2>{{object.start_time|date:'N'|upper }}</h2>
+    </div>
+    <div class="col-10">
+        <h3 class="text-uppercase"><strong>Feeling Lucky!</strong></h3>
+        <ul class="list-inline">
+            <li class="list-inline-item"><i class="fa fa-user fa-fw"></i> {{ object.get_emp }}</li>
+            <li class="list-inline-item"><i class="fa fa-envelope-o fa-fw"></i> <a
+                    href="mailto:{{ object.get_email }}">{{ object.get_email }} </a></li>
+        </ul>
+        <ul class="list-inline">
+            <li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i>
+
+                {{object.start_time|date:'l' }}
+            </li>
+            <li class="list-inline-item"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                 {{object.start_time|date:'P'|localize }} - {{ object.end_time|date:'P e'|localize }}
+
+            </li>
+            <li class="list-inline-item"><i class="fa fa-flag-o" aria-hidden="true"></i>
+                {{object.get_operations}}
+            </li>
+        </ul>
+        <p>
+        <form method="post">{% csrf_token %}
+            <p>Are you sure you want to delete this?</p>
+            {{ form }}
+            <input type="submit" value="Confirm">
+        </form>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Schedules</h2>
+
+<table class="table table-sm">
+    <thead>
+    <tr>
+        <th scope="col">User</th>
+        <th scope="col">Status</th>
+        <th scope="col">Start Time</th>
+        <th scope="col">End time</th>
+        <th scope="col">Overtime Started</th>
+        <th scope="col">Overtime Ended</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in object_list %}
+    <tr>
+        <th scope="row">{{ item }}</th>
+        <th>
+            {%if item.status != None %}
+                {{ item.status }}
+            {% endif %}
+        </th>
+        <td>{{ item.start_time }}</td>
+        <td>{{ item.end_time }}</td>
+        <td>{{ item.overtime_stated_at }}</td>
+        <td>{{ item.overtime_ended_at }}</td>
+
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
